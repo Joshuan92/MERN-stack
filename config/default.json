@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://Joshuan92:6MYcTETEicJbR5e@cluster101-pl47q.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://Joshuan92:6MYcTETEicJbR5e@cluster101-pl47q.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "ig1478as*00!"
 }

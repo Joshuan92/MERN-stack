@@ -3,6 +3,9 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const config = require('config');
 
 //require user model
 const User = require('../../models/User');
@@ -45,7 +48,7 @@ router.post(
       const avatar = gravatar.url(email, {
         s: '200', // default size
         r: 'pg', // rating: no porn
-        d: 'mm' // mm stands for a default image, user will always have some avatar
+        d: 'mm' // mm stands for a default avatar image, user will always have some avatar
       });
 
       user = new User({
@@ -56,7 +59,6 @@ router.post(
       });
 
       // Encrypt password
-
       const salt = await bcrypt.genSalt(10);
 
       // creates hashed password with the salt
@@ -66,7 +68,23 @@ router.post(
       await user.save();
 
       // Return jsonwebtoken
-      res.send('User registered');
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        {
+          expiresIn: 3600
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
