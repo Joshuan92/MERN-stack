@@ -1,9 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+
+  const { email, password } = formData;
+
+  const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
+  const onSubmit = async event => {
+    event.preventDefault();
+    console.log("Success!")
+  }
   return (
     <>
-      <h1>Login</h1>
+      <h1 className="large text-primary">Sign In</h1>
+      <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
+      <form className="form" onSubmit={event => onSubmit(event)}>
+        <div className="form-group">
+          <input
+            type="email"
+            placeholder="Email Address"
+            name="email"
+            value={email}
+            onChange={event => onChange(event)}
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={password}
+            onChange={event => onChange(event)}
+            minLength="6"
+          />
+        </div>
+        <input type="submit" className="btn btn-primary" value="Login"/>
+      </form>
+      <p className="my-1">
+        Do not have an account? <Link to="/login">Sign Up</Link>
+      </p>
     </>
   );
 }
