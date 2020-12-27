@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
@@ -9,10 +9,21 @@ import Register from "./components/auth/Register";
 // Redux
 import { Provider } from 'react-redux';
 import store from "./store";
+import { loadUser } from "./actions/auth";
+import setAuthToken from "./utils/setAuthToken";
 
-import './App.css';
+import './App.css'
+import CatchPokemon from "./components/content/CatchPokemon";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token)
+}
 
 const App = () => {
+
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
   return (
     <Provider store={store}>
       <Router>
@@ -23,6 +34,7 @@ const App = () => {
         <Switch>
           <Route exact path="/login" component={Login}/>
           <Route exact path="/register" component={Register}/>
+          <Route exact path="/pokemons/catch" component={CatchPokemon}/>
         </Switch>
       </section>
     </Router>
